@@ -34,11 +34,12 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-4">
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
       <div
         className={cn(
-          'relative w-full animate-in zoom-in-95 rounded-2xl border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-700 dark:bg-slate-800',
+          'relative w-full animate-in zoom-in-95 rounded-t-2xl border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-700 dark:bg-slate-800 sm:rounded-2xl',
+          'max-h-[90vh] overflow-y-auto',
           sizes[size]
         )}
       >
@@ -46,7 +47,7 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
           <h2 className="text-lg font-semibold text-slate-900 dark:text-white">{title}</h2>
           <button
             onClick={onClose}
-            className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-700"
+            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-700"
           >
             <X size={20} />
           </button>

@@ -7,8 +7,8 @@ import {
   LogOut,
   Moon,
   Sun,
-  ChevronLeft,
-  ChevronRight,
+  X,
+  Menu,
 } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { useStore } from '../../store/useStore'
@@ -16,7 +16,7 @@ import { cn } from '../../utils/helpers'
 
 export function Sidebar() {
   const { user, signOut } = useAuth()
-  const { isDarkMode, toggleDarkMode, sidebarOpen, setSidebarOpen } = useStore()
+  const { isDarkMode, toggleDarkMode, sidebarOpen, setSidebarOpen, mobileSidebarOpen, setMobileSidebarOpen } = useStore()
 
   const links = [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -25,24 +25,23 @@ export function Sidebar() {
     { to: '/profile', label: 'Profile', icon: UserCircle },
   ]
 
-  return (
-    <aside
-      className={cn(
-        'fixed left-0 top-0 z-40 flex h-full flex-col border-r border-slate-200 bg-white transition-all duration-300 dark:border-slate-700 dark:bg-slate-900',
-        sidebarOpen ? 'w-64' : 'w-16'
-      )}
-    >
+  const sidebarContent = (
+    <div className="flex h-full flex-col">
       <div className="flex h-16 items-center justify-between border-b border-slate-200 px-4 dark:border-slate-700">
-        {sidebarOpen && (
-          <span className="text-lg font-bold text-indigo-600 dark:text-indigo-400">
-            TaskFlow
-          </span>
-        )}
+        <span className="text-lg font-bold text-indigo-600 dark:text-indigo-400">
+          TaskFlow
+        </span>
+        <button
+          onClick={() => { setSidebarOpen(false); setMobileSidebarOpen(false) }}
+          className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 lg:hidden"
+        >
+          <X size={20} />
+        </button>
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
+          className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 hidden lg:block"
         >
-          {sidebarOpen ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
+          {sidebarOpen ? <X size={18} /> : <Menu size={18} />}
         </button>
       </div>
 
@@ -51,6 +50,7 @@ export function Sidebar() {
           <NavLink
             key={link.to}
             to={link.to}
+            onClick={() => setMobileSidebarOpen(false)}
             className={({ isActive }) =>
               cn(
                 'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
@@ -61,7 +61,7 @@ export function Sidebar() {
             }
           >
             <link.icon size={20} />
-            {sidebarOpen && <span>{link.label}</span>}
+            <span>{link.label}</span>
           </NavLink>
         ))}
       </nav>
@@ -73,17 +73,17 @@ export function Sidebar() {
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
           >
             {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-            {sidebarOpen && <span>{isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>}
+            <span>{isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>
           </button>
           <button
             onClick={signOut}
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-900/20"
           >
             <LogOut size={20} />
-            {sidebarOpen && <span>Logout</span>}
+            <span>Logout</span>
           </button>
         </div>
-        {sidebarOpen && user && (
+        {user && (
           <div className="mt-3 border-t border-slate-200 pt-3 dark:border-slate-700">
             <p className="truncate px-3 text-xs text-slate-500 dark:text-slate-500">
               {user.email}
@@ -91,6 +91,109 @@ export function Sidebar() {
           </div>
         )}
       </div>
-    </aside>
+    </div>
+  )
+
+  return (
+    <>
+      {/* Mobile hamburger */}
+      <button
+        onClick={() => setMobileSidebarOpen(true)}
+        className="fixed left-4 top-4 z-30 rounded-lg bg-white p-2 shadow-md dark:bg-slate-800 lg:hidden"
+      >
+        <Menu size={20} className="text-slate-600 dark:text-slate-300" />
+      </button>
+
+      {/* Mobile overlay */}
+      {mobileSidebarOpen && (
+        <div className="fixed inset-0 z-40 lg:hidden">
+          <div className="fixed inset-0 bg-black/50" onClick={() => setMobileSidebarOpen(false)} />
+          <aside className="relative h-full w-64 border-r border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
+            {sidebarContent}
+          </aside>
+        </div>
+      )}
+
+      {/* Desktop sidebar */}
+      <aside
+        className={cn(
+          'fixed left-0 top-0 z-30 hidden h-full flex-col border-r border-slate-200 bg-white transition-all duration-300 dark:border-slate-700 dark:bg-slate-900 lg:flex',
+          sidebarOpen ? 'w-64' : 'w-16'
+        )}
+      >
+        <div className="flex h-16 items-center justify-between border-b border-slate-200 px-4 dark:border-slate-700">
+          {sidebarOpen && (
+            <span className="text-lg font-bold text-indigo-600 dark:text-indigo-400">
+              TaskFlow
+            </span>
+          )}
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
+          >
+            {sidebarOpen ? <ChevronLeftIcon size={18} /> : <ChevronRightIcon size={18} />}
+          </button>
+        </div>
+        <nav className="flex-1 space-y-1 p-3">
+          {links.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              className={({ isActive }) =>
+                cn(
+                  'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+                  isActive
+                    ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400'
+                    : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800'
+                )
+              }
+            >
+              <link.icon size={20} />
+              {sidebarOpen && <span>{link.label}</span>}
+            </NavLink>
+          ))}
+        </nav>
+        <div className="border-t border-slate-200 p-3 dark:border-slate-700">
+          <div className="space-y-1">
+            <button
+              onClick={toggleDarkMode}
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+            >
+              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+              {sidebarOpen && <span>{isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>}
+            </button>
+            <button
+              onClick={signOut}
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-900/20"
+            >
+              <LogOut size={20} />
+              {sidebarOpen && <span>Logout</span>}
+            </button>
+          </div>
+          {sidebarOpen && user && (
+            <div className="mt-3 border-t border-slate-200 pt-3 dark:border-slate-700">
+              <p className="truncate px-3 text-xs text-slate-500 dark:text-slate-500">{user.email}</p>
+            </div>
+          )}
+        </div>
+      </aside>
+    </>
+  )
+}
+
+// Inline helpers to avoid importing unused icons
+function ChevronLeftIcon({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M15 18l-6-6 6-6" />
+    </svg>
+  )
+}
+
+function ChevronRightIcon({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 18l6-6-6-6" />
+    </svg>
   )
 }

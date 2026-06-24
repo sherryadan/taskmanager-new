@@ -70,14 +70,14 @@ export function Dashboard() {
 
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Dashboard</h1>
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-xl font-bold text-slate-900 dark:text-white sm:text-2xl">Dashboard</h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
           Welcome back, {user?.email?.split('@')[0]}
         </p>
       </div>
 
-      <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
         {statCards.map((stat) => (
           <StatCard key={stat.title} {...stat} />
         ))}

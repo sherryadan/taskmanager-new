@@ -35,8 +35,8 @@ export function Profile() {
 
   return (
     <div className="max-w-3xl">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Profile</h1>
+      <div className="mb-4 sm:mb-6">
+        <h1 className="text-xl font-bold text-slate-900 dark:text-white sm:text-2xl">Profile</h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Manage your account</p>
       </div>
 

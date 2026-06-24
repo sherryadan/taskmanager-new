@@ -10,8 +10,8 @@ export function AppLayout() {
       <Sidebar />
       <main
         className={`transition-all duration-300 ${
-          sidebarOpen ? 'ml-64' : 'ml-16'
-        } min-h-screen p-6`}
+          sidebarOpen ? 'lg:ml-64' : 'lg:ml-16'
+        } min-h-screen p-4 pt-16 lg:pt-6`}
       >
         <Outlet />
       </main>

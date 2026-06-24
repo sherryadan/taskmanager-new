@@ -13,6 +13,8 @@ interface AppState {
   toggleDarkMode: () => void
   sidebarOpen: boolean
   setSidebarOpen: (open: boolean) => void
+  mobileSidebarOpen: boolean
+  setMobileSidebarOpen: (open: boolean) => void
 }
 
 export const useStore = create<AppState>((set) => ({
@@ -45,4 +47,6 @@ export const useStore = create<AppState>((set) => ({
     }),
   sidebarOpen: true,
   setSidebarOpen: (open) => set({ sidebarOpen: open }),
+  mobileSidebarOpen: false,
+  setMobileSidebarOpen: (open) => set({ mobileSidebarOpen: open }),
 }))
