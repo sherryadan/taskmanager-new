@@ -31,8 +31,8 @@ export function Profile() {
     try {
       await updateProfile({ id: user.id, full_name: fullName })
       toast.success('Name updated successfully')
-    } catch {
-      toast.error('Failed to update name')
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to update name')
     } finally {
       setSaving(false)
     }

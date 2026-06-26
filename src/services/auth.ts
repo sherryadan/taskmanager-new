@@ -50,10 +50,11 @@ export async function getProfile(userId: string): Promise<Profile | null> {
   return data
 }
 
-export async function updateProfile(profile: Partial<Profile>) {
+export async function updateProfile(profile: Partial<Profile> & { id: string }) {
   const { data, error } = await supabase
     .from('profiles')
-    .upsert(profile)
+    .update({ full_name: profile.full_name })
+    .eq('id', profile.id)
     .select()
     .single()
   if (error) throw error
