@@ -58,8 +58,8 @@ export function Shared() {
 
   return (
     <div>
-      <div className="mb-4 sm:mb-6">
-        <h1 className="text-xl font-bold text-slate-900 dark:text-white sm:text-2xl">Shared With Me</h1>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Shared With Me</h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
           Tasks shared by other users
         </p>

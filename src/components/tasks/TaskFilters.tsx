@@ -1,4 +1,5 @@
 import { Search, SlidersHorizontal, LayoutList, LayoutGrid } from 'lucide-react'
+import { Input } from '../ui/Input'
 import { Select } from '../ui/Select'
 import { Button } from '../ui/Button'
 import type { TaskFilters as TaskFiltersType, ViewMode } from '../../types'
@@ -19,7 +20,7 @@ export function TaskFiltersBar({
   totalCount,
 }: TaskFiltersProps) {
   return (
-    <div className="mb-4 space-y-3 sm:mb-6 sm:space-y-4">
+    <div className="mb-6 space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <SlidersHorizontal size={18} className="text-slate-400" />
@@ -51,18 +52,20 @@ export function TaskFiltersBar({
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-3">
-        <div className="relative flex-1 min-w-0">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-          <input
-            type="text"
-            placeholder="Search tasks..."
-            value={filters.search}
-            onChange={(e) => onFiltersChange({ ...filters, search: e.target.value })}
-            className="w-full rounded-lg border border-slate-300 bg-white py-2 pl-9 pr-3 text-sm text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100"
-          />
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+        <div className="w-full sm:flex-1 sm:min-w-[200px]">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+            <input
+              type="text"
+              placeholder="Search tasks..."
+              value={filters.search}
+              onChange={(e) => onFiltersChange({ ...filters, search: e.target.value })}
+              className="w-full rounded-lg border border-slate-300 bg-white py-2 pl-9 pr-3 text-sm text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100"
+            />
+          </div>
         </div>
-        <div className="grid grid-cols-2 gap-2 sm:flex sm:gap-3">
+        <div className="flex flex-wrap gap-3">
           <Select
             value={filters.status}
             onChange={(e) => onFiltersChange({ ...filters, status: e.target.value as TaskFiltersType['status'] })}
@@ -72,7 +75,7 @@ export function TaskFiltersBar({
               { value: 'in_progress', label: 'In Progress' },
               { value: 'completed', label: 'Completed' },
             ]}
-            className="w-full sm:w-36"
+            className="flex-1 sm:w-36"
           />
           <Select
             value={filters.priority}
@@ -83,7 +86,7 @@ export function TaskFiltersBar({
               { value: 'medium', label: 'Medium' },
               { value: 'high', label: 'High' },
             ]}
-            className="w-full sm:w-36"
+            className="flex-1 sm:w-36"
           />
           <Select
             value={filters.sortBy}
@@ -94,7 +97,7 @@ export function TaskFiltersBar({
               { value: 'priority', label: 'Priority' },
               { value: 'title', label: 'Title' },
             ]}
-            className="w-full sm:w-36"
+            className="flex-1 sm:w-36"
           />
           <Button
             variant="secondary"
@@ -105,7 +108,6 @@ export function TaskFiltersBar({
                 sortOrder: filters.sortOrder === 'asc' ? 'desc' : 'asc',
               })
             }
-            className="w-full sm:w-auto"
           >
             {filters.sortOrder === 'asc' ? '↑ Asc' : '↓ Desc'}
           </Button>
