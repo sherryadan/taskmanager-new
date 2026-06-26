@@ -1,10 +1,14 @@
+import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { Outlet } from 'react-router-dom'
 import { Sidebar } from './Sidebar'
+import { ChatButton } from '../chat/ChatButton'
+import { ChatPanel } from '../chat/ChatPanel'
 import { useStore } from '../../store/useStore'
 
 export function AppLayout() {
   const { sidebarOpen, mobileSidebarOpen, setMobileSidebarOpen } = useStore()
+  const [chatOpen, setChatOpen] = useState(false)
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
@@ -29,6 +33,9 @@ export function AppLayout() {
       >
         <Outlet />
       </main>
+
+      <ChatButton isOpen={chatOpen} onClick={() => setChatOpen(!chatOpen)} />
+      <ChatPanel isOpen={chatOpen} onClose={() => setChatOpen(false)} />
     </div>
   )
 }
