@@ -94,6 +94,12 @@ CREATE POLICY "Users can insert own profile"
   ON profiles FOR INSERT
   WITH CHECK (id = auth.uid());
 
+DROP POLICY IF EXISTS "Users can update own profile" ON profiles;
+CREATE POLICY "Users can update own profile"
+  ON profiles FOR UPDATE
+  USING (id = auth.uid())
+  WITH CHECK (id = auth.uid());
+
 -- 8. RLS Policies for tasks
 DROP POLICY IF EXISTS "Users can view own tasks" ON tasks;
 CREATE POLICY "Users can view own tasks"
