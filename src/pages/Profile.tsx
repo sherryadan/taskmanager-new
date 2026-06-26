@@ -1,22 +1,42 @@
 import { useState, useEffect } from 'react'
-import { UserCircle, Mail, Calendar, Shield } from 'lucide-react'
+import toast from 'react-hot-toast'
+import { Mail, Calendar, Shield } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { Card } from '../components/ui/Card'
 import { Input } from '../components/ui/Input'
 import { Button } from '../components/ui/Button'
 import { useTasks } from '../hooks/useTasks'
-import type { DashboardStats } from '../types'
+import { getProfile, updateProfile } from '../services/auth'
 
 export function Profile() {
   const { user } = useAuth()
   const { stats } = useTasks()
   const [fullName, setFullName] = useState('')
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
-    if (user?.user_metadata?.full_name) {
-      setFullName(user.user_metadata.full_name)
-    }
+    if (!user) return
+    getProfile(user.id).then((profile) => {
+      if (profile?.full_name) {
+        setFullName(profile.full_name)
+      } else if (user.user_metadata?.full_name) {
+        setFullName(user.user_metadata.full_name)
+      }
+    })
   }, [user])
+
+  const handleSave = async () => {
+    if (!user) return
+    setSaving(true)
+    try {
+      await updateProfile({ id: user.id, full_name: fullName })
+      toast.success('Name updated successfully')
+    } catch {
+      toast.error('Failed to update name')
+    } finally {
+      setSaving(false)
+    }
+  }
 
   if (!user) return null
 
@@ -77,7 +97,7 @@ export function Profile() {
               <Shield size={16} />
               Account ID: {user.id.slice(0, 8)}...
             </div>
-            <Button variant="secondary" disabled>
+            <Button variant="secondary" onClick={handleSave} loading={saving}>
               Save Changes
             </Button>
           </div>
